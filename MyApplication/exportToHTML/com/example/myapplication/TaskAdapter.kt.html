@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>TaskAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+TaskAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">import android</span><span class="s1">.</span><span class="s0">view</span><span class="s1">.</span><span class="s0">LayoutInflater</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">view</span><span class="s1">.</span><span class="s0">View</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">view</span><span class="s1">.</span><span class="s0">ViewGroup</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">widget</span><span class="s1">.</span><span class="s0">CheckBox</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">widget</span><span class="s1">.</span><span class="s0">TextView</span>
+<span class="s0">import androidx</span><span class="s1">.</span><span class="s0">recyclerview</span><span class="s1">.</span><span class="s0">widget</span><span class="s1">.</span><span class="s0">RecyclerView</span>
+<span class="s0">import com</span><span class="s1">.</span><span class="s0">example</span><span class="s1">.</span><span class="s0">myapplication</span><span class="s1">.</span><span class="s0">R</span>
+
+<span class="s2">class </span><span class="s0">TaskAdapter</span><span class="s1">(</span><span class="s0">private </span><span class="s2">val </span><span class="s0">taskList: List</span><span class="s1">&lt;</span><span class="s0">Task</span><span class="s1">&gt;, </span><span class="s0">private </span><span class="s2">val </span><span class="s0">listener: OnTaskClickListener</span><span class="s1">) </span><span class="s0">:</span>
+    <span class="s0">RecyclerView</span><span class="s1">.</span><span class="s0">Adapter</span><span class="s1">&lt;</span><span class="s0">TaskAdapter</span><span class="s1">.</span><span class="s0">TaskViewHolder</span><span class="s1">&gt;() {</span>
+
+    <span class="s2">interface </span><span class="s0">OnTaskClickListener </span><span class="s1">{</span>
+        <span class="s2">fun </span><span class="s0">onTaskClick</span><span class="s1">(</span><span class="s0">task: Task</span><span class="s1">)</span>
+        <span class="s2">fun </span><span class="s0">onTaskLongClick</span><span class="s1">(</span><span class="s0">task: Task</span><span class="s1">)</span>
+    <span class="s1">}</span>
+
+    <span class="s0">override </span><span class="s2">fun </span><span class="s0">onCreateViewHolder</span><span class="s1">(</span><span class="s0">parent: ViewGroup</span><span class="s1">, </span><span class="s0">viewType: Int</span><span class="s1">)</span><span class="s0">: TaskViewHolder </span><span class="s1">{</span>
+        <span class="s2">val </span><span class="s0">view </span><span class="s1">= </span><span class="s0">LayoutInflater</span><span class="s1">.</span><span class="s0">from</span><span class="s1">(</span><span class="s0">parent</span><span class="s1">.</span><span class="s0">context</span><span class="s1">).</span><span class="s0">inflate</span><span class="s1">(</span><span class="s0">R</span><span class="s1">.</span><span class="s0">layout</span><span class="s1">.</span><span class="s0">item_task</span><span class="s1">, </span><span class="s0">parent</span><span class="s1">, </span><span class="s2">false</span><span class="s1">)</span>
+        <span class="s2">return </span><span class="s0">TaskViewHolder</span><span class="s1">(</span><span class="s0">view</span><span class="s1">)</span>
+    <span class="s1">}</span>
+
+    <span class="s0">override </span><span class="s2">fun </span><span class="s0">onBindViewHolder</span><span class="s1">(</span><span class="s0">holder: TaskViewHolder</span><span class="s1">, </span><span class="s0">position: Int</span><span class="s1">) {</span>
+        <span class="s0">holder</span><span class="s1">.</span><span class="s0">bind</span><span class="s1">(</span><span class="s0">taskList</span><span class="s1">[</span><span class="s0">position</span><span class="s1">], </span><span class="s0">listener</span><span class="s1">)</span>
+    <span class="s1">}</span>
+
+    <span class="s0">override </span><span class="s2">fun </span><span class="s0">getItemCount</span><span class="s1">()</span><span class="s0">: Int </span><span class="s1">= </span><span class="s0">taskList</span><span class="s1">.</span><span class="s0">size</span>
+
+    <span class="s2">class </span><span class="s0">TaskViewHolder</span><span class="s1">(</span><span class="s0">itemView: View</span><span class="s1">) </span><span class="s0">: RecyclerView</span><span class="s1">.</span><span class="s0">ViewHolder</span><span class="s1">(</span><span class="s0">itemView</span><span class="s1">) {</span>
+        <span class="s0">private </span><span class="s2">val </span><span class="s0">taskName: TextView </span><span class="s1">= </span><span class="s0">itemView</span><span class="s1">.</span><span class="s0">findViewById</span><span class="s1">(</span><span class="s0">R</span><span class="s1">.</span><span class="s0">id</span><span class="s1">.</span><span class="s0">textViewTaskName</span><span class="s1">)</span>
+        <span class="s0">private </span><span class="s2">val </span><span class="s0">taskCompleted: CheckBox </span><span class="s1">= </span><span class="s0">itemView</span><span class="s1">.</span><span class="s0">findViewById</span><span class="s1">(</span><span class="s0">R</span><span class="s1">.</span><span class="s0">id</span><span class="s1">.</span><span class="s0">checkBoxTaskCompleted</span><span class="s1">)</span>
+
+        <span class="s2">fun </span><span class="s0">bind</span><span class="s1">(</span><span class="s0">task: Task</span><span class="s1">, </span><span class="s0">listener: OnTaskClickListener</span><span class="s1">) {</span>
+            <span class="s0">taskName</span><span class="s1">.</span><span class="s0">text </span><span class="s1">= </span><span class="s0">task</span><span class="s1">.</span><span class="s0">name</span>
+            <span class="s0">taskCompleted</span><span class="s1">.</span><span class="s0">isChecked </span><span class="s1">= </span><span class="s0">task</span><span class="s1">.</span><span class="s0">isCompleted</span>
+
+            <span class="s0">itemView</span><span class="s1">.</span><span class="s0">setOnClickListener </span><span class="s1">{</span>
+                <span class="s0">listener</span><span class="s1">.</span><span class="s0">onTaskClick</span><span class="s1">(</span><span class="s0">task</span><span class="s1">)</span>
+            <span class="s1">}</span>
+
+            <span class="s0">itemView</span><span class="s1">.</span><span class="s0">setOnLongClickListener </span><span class="s1">{</span>
+                <span class="s0">listener</span><span class="s1">.</span><span class="s0">onTaskLongClick</span><span class="s1">(</span><span class="s0">task</span><span class="s1">)</span>
+                <span class="s2">true</span>
+            <span class="s1">}</span>
+
+            <span class="s0">taskCompleted</span><span class="s1">.</span><span class="s0">setOnClickListener </span><span class="s1">{</span>
+                <span class="s0">task</span><span class="s1">.</span><span class="s0">isCompleted </span><span class="s1">= </span><span class="s0">taskCompleted</span><span class="s1">.</span><span class="s0">isChecked</span>
+                <span class="s0">listener</span><span class="s1">.</span><span class="s0">onTaskClick</span><span class="s1">(</span><span class="s0">task</span><span class="s1">)</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

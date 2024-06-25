@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>MainActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">//MainActivity.kt</span>
+
+<span class="s0">//program must create a</span>
+<span class="s0">//todo list and use SQLite</span>
+<span class="s2">package </span><span class="s1">com</span><span class="s3">.</span><span class="s1">example</span><span class="s3">.</span><span class="s1">myapplication</span>
+
+<span class="s1">import Task</span>
+<span class="s1">import TaskAdapter</span>
+<span class="s1">import TaskDao</span>
+<span class="s1">import android</span><span class="s3">.</span><span class="s1">os</span><span class="s3">.</span><span class="s1">Bundle</span>
+<span class="s1">import android</span><span class="s3">.</span><span class="s1">widget</span><span class="s3">.</span><span class="s1">Button</span>
+<span class="s1">import android</span><span class="s3">.</span><span class="s1">widget</span><span class="s3">.</span><span class="s1">EditText</span>
+<span class="s1">import androidx</span><span class="s3">.</span><span class="s1">appcompat</span><span class="s3">.</span><span class="s1">app</span><span class="s3">.</span><span class="s1">AppCompatActivity</span>
+<span class="s1">import androidx</span><span class="s3">.</span><span class="s1">recyclerview</span><span class="s3">.</span><span class="s1">widget</span><span class="s3">.</span><span class="s1">LinearLayoutManager</span>
+<span class="s1">import androidx</span><span class="s3">.</span><span class="s1">recyclerview</span><span class="s3">.</span><span class="s1">widget</span><span class="s3">.</span><span class="s1">RecyclerView</span>
+<span class="s1">import com</span><span class="s3">.</span><span class="s1">example</span><span class="s3">.</span><span class="s1">myapplication</span><span class="s3">.</span><span class="s1">R</span>
+
+<span class="s0">//main function</span>
+<span class="s2">class </span><span class="s1">MainActivity : AppCompatActivity</span><span class="s3">() {</span>
+
+    <span class="s0">//implementation of other functions</span>
+    <span class="s1">private lateinit </span><span class="s2">var </span><span class="s1">taskDao: TaskDao</span>
+    <span class="s1">private lateinit </span><span class="s2">var </span><span class="s1">taskAdapter: TaskAdapter</span>
+    <span class="s1">private lateinit </span><span class="s2">var </span><span class="s1">taskList: MutableList</span><span class="s3">&lt;</span><span class="s1">Task</span><span class="s3">&gt;</span>
+
+    <span class="s1">override </span><span class="s2">fun </span><span class="s1">onCreate</span><span class="s3">(</span><span class="s1">savedInstanceState: Bundle?</span><span class="s3">) {</span>
+        <span class="s2">super</span><span class="s3">.</span><span class="s1">onCreate</span><span class="s3">(</span><span class="s1">savedInstanceState</span><span class="s3">)</span>
+        <span class="s1">setContentView</span><span class="s3">(</span><span class="s1">R</span><span class="s3">.</span><span class="s1">layout</span><span class="s3">.</span><span class="s1">activity_main</span><span class="s3">)</span>
+
+        <span class="s1">taskDao </span><span class="s3">= </span><span class="s1">TaskDao</span><span class="s3">(</span><span class="s2">this</span><span class="s3">)</span>
+        <span class="s1">taskList </span><span class="s3">= </span><span class="s1">taskDao</span><span class="s3">.</span><span class="s1">getAllTasks</span><span class="s3">().</span><span class="s1">toMutableList</span><span class="s3">()</span>
+
+        <span class="s0">//variables</span>
+        <span class="s2">val </span><span class="s1">editTextTask </span><span class="s3">= </span><span class="s1">findViewById</span><span class="s3">&lt;</span><span class="s1">EditText</span><span class="s3">&gt;(</span><span class="s1">R</span><span class="s3">.</span><span class="s1">id</span><span class="s3">.</span><span class="s1">editTextTask</span><span class="s3">)</span>
+        <span class="s2">val </span><span class="s1">buttonAdd </span><span class="s3">= </span><span class="s1">findViewById</span><span class="s3">&lt;</span><span class="s1">Button</span><span class="s3">&gt;(</span><span class="s1">R</span><span class="s3">.</span><span class="s1">id</span><span class="s3">.</span><span class="s1">buttonAdd</span><span class="s3">)</span>
+        <span class="s2">val </span><span class="s1">recyclerViewTasks </span><span class="s3">= </span><span class="s1">findViewById</span><span class="s3">&lt;</span><span class="s1">RecyclerView</span><span class="s3">&gt;(</span><span class="s1">R</span><span class="s3">.</span><span class="s1">id</span><span class="s3">.</span><span class="s1">recyclerViewTasks</span><span class="s3">)</span>
+
+        <span class="s0">//implementation of recycler View</span>
+        <span class="s1">recyclerViewTasks</span><span class="s3">.</span><span class="s1">layoutManager </span><span class="s3">= </span><span class="s1">LinearLayoutManager</span><span class="s3">(</span><span class="s2">this</span><span class="s3">)</span>
+        <span class="s1">taskAdapter </span><span class="s3">= </span><span class="s1">TaskAdapter</span><span class="s3">(</span><span class="s1">taskList</span><span class="s3">, </span><span class="s2">object </span><span class="s1">: TaskAdapter</span><span class="s3">.</span><span class="s1">OnTaskClickListener </span><span class="s3">{</span>
+            <span class="s1">override </span><span class="s2">fun </span><span class="s1">onTaskClick</span><span class="s3">(</span><span class="s1">task: Task</span><span class="s3">) {</span>
+                <span class="s1">taskDao</span><span class="s3">.</span><span class="s1">updateTask</span><span class="s3">(</span><span class="s1">task</span><span class="s3">)</span>
+                <span class="s1">refreshTaskList</span><span class="s3">()</span>
+            <span class="s3">}</span>
+
+            <span class="s1">override </span><span class="s2">fun </span><span class="s1">onTaskLongClick</span><span class="s3">(</span><span class="s1">task: Task</span><span class="s3">) {</span>
+                <span class="s1">taskDao</span><span class="s3">.</span><span class="s1">deleteTask</span><span class="s3">(</span><span class="s1">task</span><span class="s3">.</span><span class="s1">id</span><span class="s3">)</span>
+                <span class="s1">refreshTaskList</span><span class="s3">()</span>
+            <span class="s3">}</span>
+        <span class="s3">})</span>
+        <span class="s1">recyclerViewTasks</span><span class="s3">.</span><span class="s1">adapter </span><span class="s3">= </span><span class="s1">taskAdapter</span>
+
+        <span class="s0">//introduction of check button</span>
+        <span class="s1">buttonAdd</span><span class="s3">.</span><span class="s1">setOnClickListener </span><span class="s3">{</span>
+            <span class="s2">val </span><span class="s1">taskName </span><span class="s3">= </span><span class="s1">editTextTask</span><span class="s3">.</span><span class="s1">text</span><span class="s3">.</span><span class="s1">toString</span><span class="s3">().</span><span class="s1">trim</span><span class="s3">()</span>
+            <span class="s2">if </span><span class="s3">(</span><span class="s1">taskName</span><span class="s3">.</span><span class="s1">isNotEmpty</span><span class="s3">()) {</span>
+                <span class="s2">val </span><span class="s1">newTask </span><span class="s3">= </span><span class="s1">Task</span><span class="s3">(</span><span class="s4">0</span><span class="s3">, </span><span class="s1">taskName</span><span class="s3">, </span><span class="s2">false</span><span class="s3">)</span>
+                <span class="s1">taskDao</span><span class="s3">.</span><span class="s1">addTask</span><span class="s3">(</span><span class="s1">newTask</span><span class="s3">)</span>
+                <span class="s1">editTextTask</span><span class="s3">.</span><span class="s1">text</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">()</span>
+                <span class="s1">refreshTaskList</span><span class="s3">()</span>
+            <span class="s3">}</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+    <span class="s1">private </span><span class="s2">fun </span><span class="s1">refreshTaskList</span><span class="s3">() {</span>
+        <span class="s1">taskList</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">()</span>
+        <span class="s1">taskList</span><span class="s3">.</span><span class="s1">addAll</span><span class="s3">(</span><span class="s1">taskDao</span><span class="s3">.</span><span class="s1">getAllTasks</span><span class="s3">())</span>
+        <span class="s1">taskAdapter</span><span class="s3">.</span><span class="s1">notifyDataSetChanged</span><span class="s3">()</span>
+    <span class="s3">}</span>
+<span class="s3">}</span>
+
+</pre>
+</body>
+</html>

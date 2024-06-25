@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>TaskDao.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+TaskDao.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">import android</span><span class="s1">.</span><span class="s0">content</span><span class="s1">.</span><span class="s0">ContentValues</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">content</span><span class="s1">.</span><span class="s0">Context</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">database</span><span class="s1">.</span><span class="s0">Cursor</span>
+<span class="s0">import android</span><span class="s1">.</span><span class="s0">database</span><span class="s1">.</span><span class="s0">sqlite</span><span class="s1">.</span><span class="s0">SQLiteDatabase</span>
+<span class="s0">import com</span><span class="s1">.</span><span class="s0">example</span><span class="s1">.</span><span class="s0">myapplication</span><span class="s1">.</span><span class="s0">TaskDbHelper</span>
+
+<span class="s2">class </span><span class="s0">TaskDao</span><span class="s1">(</span><span class="s0">context: Context</span><span class="s1">) {</span>
+
+    <span class="s0">private </span><span class="s2">val </span><span class="s0">dbHelper </span><span class="s1">= </span><span class="s0">TaskDbHelper</span><span class="s1">(</span><span class="s0">context</span><span class="s1">)</span>
+
+    <span class="s2">fun </span><span class="s0">addTask</span><span class="s1">(</span><span class="s0">task: Task</span><span class="s1">) {</span>
+        <span class="s2">val </span><span class="s0">db: SQLiteDatabase </span><span class="s1">= </span><span class="s0">dbHelper</span><span class="s1">.</span><span class="s0">writableDatabase</span>
+        <span class="s2">val </span><span class="s0">values </span><span class="s1">= </span><span class="s0">ContentValues</span><span class="s1">().</span><span class="s0">apply </span><span class="s1">{</span>
+            <span class="s0">put</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_NAME</span><span class="s1">, </span><span class="s0">task</span><span class="s1">.</span><span class="s0">name</span><span class="s1">)</span>
+            <span class="s0">put</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_COMPLETED</span><span class="s1">, </span><span class="s2">if </span><span class="s1">(</span><span class="s0">task</span><span class="s1">.</span><span class="s0">isCompleted</span><span class="s1">) </span><span class="s3">1 </span><span class="s2">else </span><span class="s3">0</span><span class="s1">)</span>
+        <span class="s1">}</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">insert</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">TABLE_TASKS</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s0">values</span><span class="s1">)</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">close</span><span class="s1">()</span>
+    <span class="s1">}</span>
+
+    <span class="s2">fun </span><span class="s0">getAllTasks</span><span class="s1">()</span><span class="s0">: List</span><span class="s1">&lt;</span><span class="s0">Task</span><span class="s1">&gt; {</span>
+        <span class="s2">val </span><span class="s0">tasks </span><span class="s1">= </span><span class="s0">mutableListOf</span><span class="s1">&lt;</span><span class="s0">Task</span><span class="s1">&gt;()</span>
+        <span class="s2">val </span><span class="s0">db: SQLiteDatabase </span><span class="s1">= </span><span class="s0">dbHelper</span><span class="s1">.</span><span class="s0">readableDatabase</span>
+        <span class="s2">val </span><span class="s0">cursor: Cursor </span><span class="s1">= </span><span class="s0">db</span><span class="s1">.</span><span class="s0">query</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">TABLE_TASKS</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s2">null</span><span class="s1">, </span><span class="s2">null</span><span class="s1">)</span>
+        <span class="s0">with</span><span class="s1">(</span><span class="s0">cursor</span><span class="s1">) {</span>
+            <span class="s2">while </span><span class="s1">(</span><span class="s0">moveToNext</span><span class="s1">()) {</span>
+                <span class="s2">val </span><span class="s0">id </span><span class="s1">= </span><span class="s0">getInt</span><span class="s1">(</span><span class="s0">getColumnIndexOrThrow</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_ID</span><span class="s1">))</span>
+                <span class="s2">val </span><span class="s0">name </span><span class="s1">= </span><span class="s0">getString</span><span class="s1">(</span><span class="s0">getColumnIndexOrThrow</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_NAME</span><span class="s1">))</span>
+                <span class="s2">val </span><span class="s0">isCompleted </span><span class="s1">= </span><span class="s0">getInt</span><span class="s1">(</span><span class="s0">getColumnIndexOrThrow</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_COMPLETED</span><span class="s1">)) == </span><span class="s3">1</span>
+                <span class="s0">tasks</span><span class="s1">.</span><span class="s0">add</span><span class="s1">(</span><span class="s0">Task</span><span class="s1">(</span><span class="s0">id</span><span class="s1">, </span><span class="s0">name</span><span class="s1">, </span><span class="s0">isCompleted</span><span class="s1">))</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">cursor</span><span class="s1">.</span><span class="s0">close</span><span class="s1">()</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">close</span><span class="s1">()</span>
+        <span class="s2">return </span><span class="s0">tasks</span>
+    <span class="s1">}</span>
+
+    <span class="s2">fun </span><span class="s0">updateTask</span><span class="s1">(</span><span class="s0">task: Task</span><span class="s1">) {</span>
+        <span class="s2">val </span><span class="s0">db: SQLiteDatabase </span><span class="s1">= </span><span class="s0">dbHelper</span><span class="s1">.</span><span class="s0">writableDatabase</span>
+        <span class="s2">val </span><span class="s0">values </span><span class="s1">= </span><span class="s0">ContentValues</span><span class="s1">().</span><span class="s0">apply </span><span class="s1">{</span>
+            <span class="s0">put</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_NAME</span><span class="s1">, </span><span class="s0">task</span><span class="s1">.</span><span class="s0">name</span><span class="s1">)</span>
+            <span class="s0">put</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_COMPLETED</span><span class="s1">, </span><span class="s2">if </span><span class="s1">(</span><span class="s0">task</span><span class="s1">.</span><span class="s0">isCompleted</span><span class="s1">) </span><span class="s3">1 </span><span class="s2">else </span><span class="s3">0</span><span class="s1">)</span>
+        <span class="s1">}</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">update</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">TABLE_TASKS</span><span class="s1">, </span><span class="s0">values</span><span class="s1">, </span><span class="s4">&quot;</span><span class="s2">${</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_ID</span><span class="s2">} </span><span class="s4">= ?&quot;</span><span class="s1">, </span><span class="s0">arrayOf</span><span class="s1">(</span><span class="s0">task</span><span class="s1">.</span><span class="s0">id</span><span class="s1">.</span><span class="s0">toString</span><span class="s1">()))</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">close</span><span class="s1">()</span>
+    <span class="s1">}</span>
+
+    <span class="s2">fun </span><span class="s0">deleteTask</span><span class="s1">(</span><span class="s0">taskId: Int</span><span class="s1">) {</span>
+        <span class="s2">val </span><span class="s0">db: SQLiteDatabase </span><span class="s1">= </span><span class="s0">dbHelper</span><span class="s1">.</span><span class="s0">writableDatabase</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">delete</span><span class="s1">(</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">TABLE_TASKS</span><span class="s1">, </span><span class="s4">&quot;</span><span class="s2">${</span><span class="s0">TaskDbHelper</span><span class="s1">.</span><span class="s0">COLUMN_ID</span><span class="s2">} </span><span class="s4">= ?&quot;</span><span class="s1">, </span><span class="s0">arrayOf</span><span class="s1">(</span><span class="s0">taskId</span><span class="s1">.</span><span class="s0">toString</span><span class="s1">()))</span>
+        <span class="s0">db</span><span class="s1">.</span><span class="s0">close</span><span class="s1">()</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>
